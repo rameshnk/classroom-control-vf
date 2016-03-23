@@ -1,6 +1,6 @@
+#package nginx
 class nginx{
-  #package nginx
-  package {'nginx':
+    package {'nginx':,
     ensure => present,
   }
   
@@ -8,8 +8,8 @@ class nginx{
   file{'/var/www':
     ensure => directory,
     owner => 'root',
-    group => 'root'
-    mode => '0755'
+    group => 'root',
+    mode => '0755',
   }
   
   #index.html
@@ -17,8 +17,8 @@ class nginx{
     ensure => file,
     owner => 'root',
     group => 'root'
-    mode => '0755'
-    source => 'puppet:///modules/nginx/index.html'
+    mode => '0755',
+    source => 'puppet:///modules/nginx/index.html',
   }
   
   #config file nginx.conf
@@ -27,15 +27,30 @@ class nginx{
     owner => 'root',
     group => 'root'
     mode => '0755'
-    source => 'puppet:///modules/nginx/nginx.conf'
-    require => Package['nginx']
-    notify => Service['nginx']
+    source => 'puppet:///modules/nginx/nginx.conf',
+    require => Package['nginx'],
+    notify => Service['nginx'],
   }
   
   file{'/etc/nginx/conf.d':
     ensure => file,
     owner => 'root',
     group => 'root'
-    mode => '0755'
+    mode => '0755',
+  }
+  
+  file{'/etc/nginx/nginx.conf/default.conf':
+    ensure => file,
+    owner => 'root',
+    group => 'root'
+    mode => '0755',
+    source => 'puppet:///modules/nginx/nginx.conf',
+    require => Package['nginx'],
+    notify => Service['nginx'],
+  }  
+  
+  service{'nginx':
+    ensure => running,
+    enable => true,
   }
 }
